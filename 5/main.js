@@ -309,10 +309,8 @@ function part2(input) {
     let value = seed;
     for (const map of maps) {
       const remap = getRemap(value, map);
-      if (remap) {
+      if (remap)
         value = remap.dest + (value - remap.src);
-        break;
-      }
     }
 
     return value;
