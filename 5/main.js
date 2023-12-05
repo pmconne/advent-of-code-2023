@@ -231,6 +231,14 @@ humidity-to-location map:
 2908283971 2254169063 217036012
 0 327948845 367508399`;
 
+function getRemap(value, map) {
+  for (const remap of map)
+    if (value >= remap.src && value < remap.src + remap.len)
+      return remap;
+
+  return undefined;
+}
+
 function part1(input) {
   let lines = input.split("\n").map((x) => x.trim()).filter((x) => x.length > 0);
   let seeds = lines[0].split(" ");
@@ -255,59 +263,6 @@ function part1(input) {
   function seedToLocation(seed) {
     let value = seed;
     for (const map of maps) {
-      for (const remap of map) {
-        if (value >= remap.src && value < remap.src + remap.len) {
-          value = remap.dest + (value - remap.src);
-          break;
-        }
-      }
-    }
-
-    return value;
-  }
-
-  let min = Number.MAX_SAFE_INTEGER;
-  for (const seed of seeds) {
-    const location = seedToLocation(seed);
-    console.log(`${seed} => ${location}`);
-    min = Math.min(min, seedToLocation(seed));
-  }
-
-  console.log(min);
-}
-
-function part2(input) {
-  let lines = input.split("\n").map((x) => x.trim()).filter((x) => x.length > 0);
-  let seeds = lines[0].split(" ");
-  seeds.shift();
-  seeds = seeds.map((x) => Number.parseInt(x, 10));
-
-  lines.shift();
-  const maps = [];
-  let curMap = undefined;
-  for (let line of lines) {
-    if (line[0] < "0" || line[0] > "9") {
-      curMap = undefined;
-      continue;
-    } else if (!curMap) {
-      maps.push(curMap = []);
-    }
-
-    const parts = line.split(" ").map((x) => Number.parseInt(x));
-    curMap.push({ dest: parts[0], src: parts[1], len: parts[2] });
-  }
-
-  function getRemap(value, map) {
-    for (const remap of map)
-      if (value >= remap.src && value < remap.src + remap.len)
-        return remap;
-
-    return undefined;
-  }
-
-  function seedToLocation(seed) {
-    let value = seed;
-    for (const map of maps) {
       const remap = getRemap(value, map);
       if (remap)
         value = remap.dest + (value - remap.src);
@@ -326,5 +281,5 @@ function part2(input) {
   console.log(min);
 }
 
-part2(sampleInput);
-part2(realInput);
+part1(sampleInput);
+part1(realInput);
