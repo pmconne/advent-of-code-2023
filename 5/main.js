@@ -329,6 +329,18 @@ function part2(input) {
   }
 
   console.log(min);
+
+  /* Proves there are no seed numbers that don't map to a soil number
+  for (let i = 0; i < seeds.length; i += 2) {
+    let seed = seeds[i];
+    const end = seed + seeds[i + 1];
+    console.log(`${seed}..${end}`);
+    for (let j = seed; j < end; j++)
+      if (!getRemap(j, maps[0]))
+        console.log(`${j} has no remap`);
+  }
+  */
+
 }
 
 part2(sampleInput);
