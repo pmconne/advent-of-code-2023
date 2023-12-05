@@ -281,5 +281,55 @@ function part1(input) {
   console.log(min);
 }
 
-part1(sampleInput);
-part1(realInput);
+function part2(input) {
+  let lines = input.split("\n").map((x) => x.trim()).filter((x) => x.length > 0);
+  let seeds = lines[0].split(" ");
+  seeds.shift();
+  seeds = seeds.map((x) => Number.parseInt(x, 10));
+
+  lines.shift();
+  const maps = [];
+  let curMap = undefined;
+  for (let line of lines) {
+    if (line[0] < "0" || line[0] > "9") {
+      curMap = undefined;
+      continue;
+    } else if (!curMap) {
+      maps.push(curMap = []);
+    }
+
+    const parts = line.split(" ").map((x) => Number.parseInt(x));
+    curMap.push({ dest: parts[0], src: parts[1], len: parts[2] });
+  }
+
+  function seedToLocation(seed) {
+    let value = seed;
+    for (const map of maps) {
+      const remap = getRemap(value, map);
+      if (remap)
+        value = remap.dest + (value - remap.src);
+    }
+
+    return value;
+  }
+
+  let min = Number.MAX_SAFE_INTEGER;
+  for (let i = 0; i < seeds.length; i += 2) {
+    let seed = seeds[i];
+    const end = seed + seeds[i + 1];
+    console.log(`${seed}..${end}`);
+    while (seed < end) {
+      const remap = getRemap(seed, maps[0]);
+      const location = seedToLocation(seed);
+      console.log(`${seed} => ${location}`);
+      min = Math.min(min, seedToLocation(seed));
+      seed += remap.len;
+      console.log(` ${seed} ${JSON.stringify(remap)}`);
+    }
+  }
+
+  console.log(min);
+}
+
+part2(sampleInput);
+part2(realInput);
