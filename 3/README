@@ -1,0 +1,41 @@
+clang -lstdc++ main.cpp -std=c++2a
+
+Have two-dimensional array of characters in memory.
+for each line
+    for each char
+        if is digit
+            start = cur index
+            parse number
+            check next char and char before start is symbol
+            check line above and below from (start-1, end+1) for symbol
+
+For each line we want to know for each number in it:
+  The number
+  The index of the first and last digits in it.
+
+Part 2
+Given a * we want to know is it adjacent to exactly two part numbers.
+A part number is still any number adjacent to any symbol.
+By definition, any number that is adjacent to * is a part number.
+We won't bother looking at any other part numbers because they don't matter.
+
+Given *, search the (up to) eight adjacent cells for a digit.
+Digits in multiple cells may correspond to the same part number.
+
+123 1.2 .12 12. 1.. .1. ..1
+ *   *   *   *   *   *   *
+
+You could make a grid where each cell stores the full number that intersects that cell.
+Do we know if the input contains duplicate part numbers?
+  It does. So far I haven't found any cases where the same number would be adjacent to a single symbol.
+
+Solve part 1 again by searching for *symbols* not *numbers*.
+Make a grid WxH initialized to all -1.
+Make a vector of parsed numbers.
+Scan each line to find strings of digits.
+Append parsed number to vector.
+Replace each digit in grid with index of number in vector
+
+Now scan input for asterisks.
+Find all unique number indices in adjacent cells.
+If exactly 2, it's a gear.

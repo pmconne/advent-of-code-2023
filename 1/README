@@ -1,0 +1,26 @@
+clang -lstdc++ main.cpp -std=c++2a
+
+
+1abc2 => 12
+pqr3stu8vwx => 38
+a1b2c3d4e5f => 15
+treb7uchet => 77
+
+First digit = first digit encountered from start
+Last = first digit encountered from end
+
+# Part 2
+
+Some digits are spelled out as "one" "two" "three" .. "nine"
+
+
+two1nine => 29
+eightwothree => 83
+abcone2threexyz => 13
+xtwone3four => 24
+4nineeightseven2 => 42
+zoneight234 => 14
+7pqrstsixteen => 76
+
+Just find first match to any substring in ["0", "zero", "1", "one", "2", "two", ..., "9", "nine"]
+Do it the stupid way: make a function that goes through the list of substrings and uses std::string::starts_with
