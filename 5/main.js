@@ -302,46 +302,44 @@ function part2(input) {
     curMap.push({ dest: parts[0], src: parts[1], len: parts[2] });
   }
 
-  function seedToLocation(seed) {
-    let value = seed;
-    for (const map of maps) {
-      const remap = getRemap(value, map);
-      if (remap)
-        value = remap.dest + (value - remap.src);
+  function seedFromLocation(location) {
+    let value = location;
+    for (let i = maps.length - 1; i >= 0; i--) {
+      const map = maps[i];
+      let next = value;
+      for (const remap of map) {
+        if (value >= remap.dest && value < remap.dest + remap.len) {
+          next = remap.src + (value - remap.dest);
+          break;
+        }
+      }
+
+      //console.log(`  ${value} => ${next}`);
+      value = next;
     }
 
-    return value;
-  }
-
-  let min = Number.MAX_SAFE_INTEGER;
-  for (let i = 0; i < seeds.length; i += 2) {
-    let seed = seeds[i];
-    const end = seed + seeds[i + 1];
-    console.log(`${seed}..${end}`);
-    while (seed < end) {
-      const remap = getRemap(seed, maps[0]);
-      const location = seedToLocation(seed);
-      console.log(`${seed} => ${location}`);
-      min = Math.min(min, seedToLocation(seed));
-      seed += remap.len;
-      console.log(` ${seed} ${JSON.stringify(remap)}`);
+    for (let i = 0; i < seeds.length; i += 2) {
+      const start = seeds[i];
+      const end = seeds[i + 1] + start;
+      if (value >= start && value < end)
+        return value;
     }
+
+    return undefined;
   }
 
-  console.log(min);
+  let location = 0;
+  while (true) {
+    //console.log(location);
+    const seed = seedFromLocation(location);
+    if (undefined !== seed) {
+      console.log(`seed=${seed}`);
+      return location;
+    }
 
-  /* Proves there are no seed numbers that don't map to a soil number
-  for (let i = 0; i < seeds.length; i += 2) {
-    let seed = seeds[i];
-    const end = seed + seeds[i + 1];
-    console.log(`${seed}..${end}`);
-    for (let j = seed; j < end; j++)
-      if (!getRemap(j, maps[0]))
-        console.log(`${j} has no remap`);
+    ++location;
   }
-  */
-
 }
 
-part2(sampleInput);
-part2(realInput);
+console.log(`sample = ${part2(sampleInput)}`);
+console.log(`real = ${part2(realInput)}`);
