@@ -40,6 +40,10 @@ function computeMinAndMaxHoldTime(race) {
 
 function part1(input) {
   const races = parse(input);
+  return computeScore(races);
+}
+
+function computeScore(races) {
   console.log(JSON.stringify(races, null, "\t"));
   let score = 1;
   for (const race of races) {
