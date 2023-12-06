@@ -25,14 +25,11 @@ function computeMinAndMaxHoldTime(race) {
       break;
   }
 
-  let max = min;
-  while (max < race.time) {
-    const n = max + 1;
-    const distance = n * (race.time - n);
-    if (distance <= race.record)
+  let max = race.time;
+  for (; max > 0; max--) {
+    const distance = max * (race.time - max);
+    if (distance > race.record)
       break;
-
-    max = n;
   }
 
   return { min, max };
@@ -44,17 +41,24 @@ function part1(input) {
 }
 
 function computeScore(races) {
-  console.log(JSON.stringify(races, null, "\t"));
+  // console.log(JSON.stringify(races, null, "\t"));
   let score = 1;
   for (const race of races) {
     const bounds = computeMinAndMaxHoldTime(race);
     const margin = bounds.max + 1 - bounds.min;
-    console.log(`time=${race.time} record=${race.record} min=${bounds.min} max=${bounds.max} margin=${margin}`);
+    // console.log(`time=${race.time} record=${race.record} min=${bounds.min} max=${bounds.max} margin=${margin}`);
     score *= margin;
   }
 
   return score;
 }
 
+function part2(race) {
+  return computeScore([race]);
+}
+
 console.log(part1(sampleInput));
 console.log(part1(realInput));
+
+console.log(part2({ time: 71530, record: 940200 }));
+console.log(part2({ time: 44806572, record: 208158110501102 }));
