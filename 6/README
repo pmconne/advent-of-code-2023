@@ -1,0 +1,32 @@
+Time:      7  15   30
+Distance:  9  40  200
+
+Each time-distance pair represents the current record for one race. You want to beat each record.
+Hold button for N ms, travel at N mm/ms
+
+Race 1: hold for 2-5 to win.
+Race 2: hold for 4-11 to win.
+Race 3: hold for 11-19 to win.
+
+Given T - the fixed length of the race in ms and N the variable number of seconds to hold the button, compute D the distance you will travel.
+D = N*(T-N)
+
+Each race = { T time, R record distance }.
+We need D to be > the record R.
+
+N*(T-N) > R
+N > R/(T-N)
+N > R/T - R/N
+N > R(1/T - 1/N)
+um.
+
+We know we must travel at least R + 1 mm to win.
+G = R+1
+N*(T-N) > G will tell you the minimum, right?
+
+Race 1: T=7 R=9. Start at 1, find first result > R.
+1*6 = 6
+2*5 = 10
+
+To compute the maximum time we can hold:
+Continue to T, stop once we find first result < R
