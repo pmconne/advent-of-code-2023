@@ -1006,19 +1006,19 @@ A8624 35
 TK4JT 819`;
 
 // Remap so that lexical sort puts the highest-valued cards first
-function encodeHand(hand) {
+function encodeHand(hand, includeJokers) {
   const remap = {
-    A: "A", K: "B", Q: "C", J: "D", T: "E",
+    A: "A", K: "B", Q: "C", J: includeJokers ? "Z" : "D", T: "E",
     9: "F", 8: "G", 7: "H", 6: "I", 5: "J", 4: "K", 3: "L", 2: "M",
   };
   return [...hand].map((x) => remap[x]).join("");
 }
 
-function decodeHands(input) {
+function decodeHands(input, includeJokers) {
   const hands = [];
   for (const line of input.split("\n")) {
     const parts = line.split(" ");
-    hands.push({ encoded: encodeHand(parts[0]), cards: parts[0], bid: Number.parseInt(parts[1], 10) });
+    hands.push({ encoded: encodeHand(parts[0], includeJokers), cards: parts[0], bid: Number.parseInt(parts[1], 10) });
   }
 
   return hands;
@@ -1031,24 +1031,24 @@ function decodeHands(input) {
 // 4: 2 pair
 // 5: 1 pair
 // 6: all different
+function categorizeByCardCount(highestCount, nextHighestCount) {
+  switch (highestCount) {
+    case 5: return 0;
+    case 4: return 1;
+    case 3: return nextHighestCount === 2 ? 2 : 3;
+    case 2: return nextHighestCount == 2 ? 4: 5;
+    case 1: return 6;
+    default: throw new Error("Card count 0??");
+  }
+}
+
 function categorizeHand(hand) {
   const cardCounts = { };
   for (const card of [...hand])
     cardCounts[card] = (cardCounts[card] ?? 0) + 1;
 
   const sorted = Array.from(Object.values(cardCounts)).sort((x, y) => y - x);
-
-  switch (sorted[0]) {
-    case 5: return 0;
-    case 4: return 1;
-    case 3: return sorted[1] === 2 ? 2 : 3;
-    case 2: return sorted[1] == 2 ? 4: 5;
-    case 1: return 6;
-    default: {
-      console.log(`card count = 0? ${hand.cards}`);
-      throw new Error("Card count 0??");
-    }
-  }
+  return categorizeByCardCount(sorted[0], sorted[1]);
 }
 
 function sortByRank(hands) {
@@ -1063,7 +1063,7 @@ function sortByRank(hands) {
 }
 
 function part1(input) {
-  const hands = sortByRank(decodeHands(input));
+  const hands = sortByRank(decodeHands(input, false));
   let total = 0;
   for (let i = 0; i < hands.length; i++) {
     // console.log(`${hands[i].bid}`);
@@ -1071,6 +1071,11 @@ function part1(input) {
   }
 
   return total;
+}
+
+function part2(input) {
+  const decoded = decodeHands(input, true);
+  const hands = sortByRank(decoded, true);
 }
 
 // Prints 0..6
