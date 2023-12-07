@@ -1,7 +1,11 @@
 
+// Remap so that lexical sort puts the highest-valued cards first
 function encodeHand(hand) {
-  const remap = { T: "A", J: "B", Q: "C", K: "D", A: "E" };
-  return [...hand].map((x) => remap[x] ?? x).join("");
+  const remap = {
+    A: "A", K: "B", Q: "C", J: "D", T: "E",
+    9: "F", 8: "G", 7: "H", 6: "I", 5: "J", 4: "K", 3: "L", 2: "M",
+  };
+  return [...hand].map((x) => remap[x]).join("");
 }
 
 // 0: 5 of a kind
