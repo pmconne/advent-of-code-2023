@@ -1,0 +1,19 @@
+There are 13 different card values: 2-9 and TJQKA
+The initial order matters for breaking ties if both hands have the same type (full house, two pair, etc).
+
+A hand's STRENGTH is determined by its type.
+A hand's RANK is its position in a list of all hands sorted by strength.
+
+First produce one list of hands for each type.
+Then sort each list.
+Then concatenate them.
+Now you have ranks.
+
+
+Sorting within a type could just be a lexical sort if we replace the card symbols.
+  T=A J=B Q=C K=D A=E
+
+Determining type:
+  Sort the five characters in hand
+  Count top two max contiguous number of same character.
+L
