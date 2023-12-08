@@ -1,0 +1,7 @@
+Part 2
+
+We could determine all the paths that lead from a given start node to an end node, then find the least common multiple...
+It's really about cycles I think.
+It seems like LCM shouldn't work but happens to work for this specific input?
+
+

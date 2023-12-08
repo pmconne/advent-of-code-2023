@@ -14,6 +14,17 @@ AAA = (BBB, BBB)
 BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)`;
 
+const sampleInput3 = `LR
+
+11A = (11B, XXX)
+11B = (XXX, 11Z)
+11Z = (11B, XXX)
+22A = (22B, XXX)
+22B = (22C, 22C)
+22C = (22Z, 22Z)
+22Z = (22B, 22B)
+XXX = (XXX, XXX)`;
+
 const realInput = `LRRLLRLLRRLRRLLRRLLRLRRRLLRRLRRRLRRLRRRLLRRLLRLLRRLRLRRRLRRLLRRRLRLRRLRRLRLRLRLLRLRRRLLRLLRRLRRRLRLRLRRRLRRLLRRRLRLRRLRRLLRRLRRRLRRLRRLRRLLRLRLRRLLRLLRRRLRRLRRLRRRLRLLRRRLRRRLRRLLRRRLRRRLRLLRLRRLRLLRRLLLRRLRRLRRLRLRRRLRRLLRLRRRLRRLRLLLRRLRRLRRRLLLRLLLLRRLRLLLRLRRRLRRRLRLRRRLLLLRLRRRLRLLLRRLRLRRLRRLRRRLRRRR
 
 LHF = (QTF, KKT)
@@ -760,16 +771,10 @@ function parseMap(input) {
   return result;
 }
 
-function part1(input) {
-  // console.log(input);
-  const map = parseMap(input);
-  // console.log(JSON.stringify(map));
-  // console.log("");
-
+function countSteps(curNode, map, endCriterion) {
   let numSteps = 0;
-  let curNode = "AAA";
   let dirIdx = 0;
-  while (curNode !== "ZZZ") {
+  while (!endCriterion(curNode)) {
     const dir = map.directions[dirIdx++];
     if (dirIdx === map.directions.length)
       dirIdx = 0;
@@ -782,8 +787,56 @@ function part1(input) {
   return numSteps;
 }
 
+function part1(input) {
+  // console.log(input);
+  const map = parseMap(input);
+  // console.log(JSON.stringify(map));
+  // console.log("");
+  return countSteps("AAA", map, (node) => node === "ZZZ");
+}
+
 
 
 console.log(part1(sampleInput1));
 console.log(part1(sampleInput2));
 console.log(part1(realInput));
+
+function part2(input) {
+  const map = parseMap(input);
+  let curNodes = Array.from(Object.keys(map.nodes)).filter((x) => x[2] === "A");
+
+  let distances = new Set();
+  for (const curNode of curNodes) {
+    const distance = countSteps(curNode, map, (node) => node[2] === "Z");
+    console.log(`${curNode} => ${distance}`);
+    distances.add(distance);
+  }
+
+  // https://stackoverflow.com/questions/47047682/least-common-multiple-of-an-array-values-using-euclidean-algorithm
+  const gcd = (a, b) => a ? gcd(b % a, a) : b;
+  const lcm = (a, b) => a * b / gcd(a, b);
+
+  const distance = Array.from(distances).reduce(lcm);
+  return distance;
+
+  /*
+  let dirIdx = 0;
+  while (!curNodes.every((x) => x[2] === "Z")) {
+    console.log(curNodes);
+    const dir = map.directions[dirIdx++];
+    if (dirIdx === map.directions.length)
+      dirIdx = 0;
+    
+    ++distance;
+    curNodes = curNodes.map((curNode) => {
+      const nodes = map.nodes[curNode];
+      return nodes[dir];
+    });
+  }
+
+  return distance;
+  */
+}
+
+console.log(part2(sampleInput3));
+console.log(part2(realInput));
