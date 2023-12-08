@@ -1047,8 +1047,35 @@ function categorizeHand(hand) {
   for (const card of [...hand])
     cardCounts[card] = (cardCounts[card] ?? 0) + 1;
 
+  const numJokers = cardCounts.Z ?? 0;
+  if (numJokers === 5)
+    return 0;
+
+  delete cardCounts.Z;
+
   const sorted = Array.from(Object.values(cardCounts)).sort((x, y) => y - x);
-  return categorizeByCardCount(sorted[0], sorted[1]);
+
+  let group = categorizeByCardCount(sorted[0], sorted[1]);
+  if (numJokers === 0)
+    return group;
+
+  switch (group) {
+    case 1:
+      return 0;
+    case 3:
+    case 4:
+      return group - numJokers - 1;
+    case 5: return group - numJokers - (numJokers > 1 ? 2 : 1);
+    case 6:
+      switch (numJokers) {
+        case 1: return 5;
+        case 2: return 3;
+        case 3: return 1;
+        default: return 0;
+      }
+    default:
+      throw new Error("no jokers possible!");
+  }
 }
 
 function sortByRank(hands) {
@@ -1062,8 +1089,8 @@ function sortByRank(hands) {
   return Array.prototype.concat(...groups);
 }
 
-function part1(input) {
-  const hands = sortByRank(decodeHands(input, false));
+function go(input, includeJokers) {
+  const hands = sortByRank(decodeHands(input, includeJokers));
   let total = 0;
   for (let i = 0; i < hands.length; i++) {
     // console.log(`${hands[i].bid}`);
@@ -1073,9 +1100,12 @@ function part1(input) {
   return total;
 }
 
+function part1(input) {
+  return go(input, false);
+}
+
 function part2(input) {
-  const decoded = decodeHands(input, true);
-  const hands = sortByRank(decoded, true);
+  return go(input, true);
 }
 
 // Prints 0..6
@@ -1090,3 +1120,5 @@ function part2(input) {
 // console.log(JSON.stringify(decodeHands(sampleInput)));
 console.log(part1(sampleInput));
 console.log(part1(realInput));
+console.log(part2(sampleInput));
+console.log(part2(realInput));
