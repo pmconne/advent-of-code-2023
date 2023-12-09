@@ -36,8 +36,7 @@ function predict(history) {
 
 function part1(input) {
   const histories = parseHistories(input);
-  for (const history of histories)
-    console.log(`${history} => ${predict(history)}`);
+  return histories.reduce((prev, cur) => prev + predict(cur), 0);
 }
 
 console.log(part1(sampleInput));
