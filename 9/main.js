@@ -29,13 +29,15 @@ function computeDeltas(history) {
   return deltas;
 }
 
+function predict(history) {
+  const deltas = computeDeltas(history);
+  return deltas.map((x) => x[x.length - 1]).reduce((prev, cur) => prev + cur, history[history.length - 1]);
+}
+
 function part1(input) {
   const histories = parseHistories(input);
-  for (const history of histories) {
-    const deltas = computeDeltas(history);
-    console.log(history);
-    console.log(deltas);
-  }
+  for (const history of histories)
+    console.log(`${history} => ${predict(history)}`);
 }
 
 console.log(part1(sampleInput));
