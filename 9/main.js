@@ -240,5 +240,21 @@ function part1(input) {
   return histories.reduce((prev, cur) => prev + predict(cur), 0);
 }
 
-console.log(part1(sampleInput));
-console.log(part1(realInput));
+function part2(input) {
+  const histories = parseHistories(input);
+  let total = 0;
+  for (const history of histories) {
+    const deltas = computeDeltas(history);
+    const prediction = history[0] - deltas.reverse().map((x) => x[0]).reduce((prev, cur) => cur - prev, 0);
+    console.log(`${history} => ${prediction}`);
+    total += prediction;
+  }
+
+  return total;
+}      
+
+// console.log(part1(sampleInput));
+// console.log(part1(realInput));
+console.log(part2(sampleInput));
+console.log(part2(realInput));
+
