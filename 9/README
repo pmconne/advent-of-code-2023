@@ -26,3 +26,8 @@
 Each successive value = previous value + some offset where offset <= previous value's offset.
 Just do the brute force approach first and look for patterns.
 
+Part 2
+
+extrapolating back in time.
+for the last non-zero row the previous value is the same as all the other values.
+row above that, it's first value in row minus new previous value in next row

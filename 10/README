@@ -1,0 +1,11 @@
+Every pipe in the loop connects to exactly two neighbors.
+So tile S has exactly two pipes in the 4 cardinal directions, which must be part of the loop.
+Just follow both of those connections until they converge on the same tile.
+
+To follow the path through a tile you need to know from which direction you entered it.
+Actually probably just need to follow one connection until you return to the start, then chop the the distance in half.
+We know the tile we're on and the direction we want to move.
+Add 1 to distance.
+Get coords of tile in desired direction.
+Get tile at those coords. If S => done.
+Else determine exit direction based on tile and entrance direction and repeat.
