@@ -267,8 +267,51 @@ function part1(input) {
   return dist / 2;
 }
 
-function part2(input) {
+function expandMap(rows) {
+  const map = [];
+  for (let i = 0; i < rows.length; i++) {
+    const mapRow = [];
+    const row = rows[i];
+    for (let j = 0; j < row.length * 2; j++)
+      mapRow.push(" ");
 
+  map.push(mapRow);
+  map.push([...mapRow]);
+  }
+
+  const expandTile = (tile, pos) => {
+    const x = pos.x * 2;
+    const y = pos.y * 2;
+    map[y][x] = tile;
+    const directions = getDirections(tile);
+    if (directions.includes("E"))
+      map[y][x+1] = "-";
+    if (directions.includes("S"))
+      map[y+1][x] = "|";
+  };
+  
+  const start = findStart(rows);
+  
+  let dir = start.direction;
+  let coords = start;
+  while (true) {
+    coords = getTileCoords(coords, dir);
+    const tile = getTile(rows, coords);
+    if (tile === "S")
+      break;
+
+    expandTile(tile, coords);
+    dir = getExitDirection(tile, dir);
+  }
+
+  
+  expandTile(start.tile, start);
+  return map;
+}
+
+function part2(input) {
+  const map = expandMap (input.split("\n"));
+  console.log(map.map((x) => x.join("")).join("\n"));
 }
 
 // expect 4, 4, 8, 8
@@ -277,3 +320,9 @@ console.log(part1(sampleInput2));
 console.log(part1(sampleInput3));
 console.log(part1(sampleInput4));
 console.log(part1(realInput));
+
+console.log(part2(sampleInput1));
+console.log(part2(sampleInput2));
+console.log(part2(sampleInput3));
+console.log(part2(sampleInput4));
+//console.log(part2(realInput));
