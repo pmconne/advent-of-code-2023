@@ -207,8 +207,8 @@ function getExitDirection(tile, entranceDir) {
   }
 }
 
-function part1(input) {
-  const rows = input.split("\n");
+// => { x, y, tile: PipeSymbol, direction: N|S|E|W }
+function findStart(rows) {
   const start = { };
   for (start.y = 0; start.y < rows.length; start.y++)
     if (-1 !== (start.x = rows[start.y].indexOf("S")))
@@ -230,10 +230,28 @@ function part1(input) {
   if (2 !== neighbors.length)
     throw new Error("Starting tile should have exactly two connecting pipes");
 
-  console.log(`neighbors: ${neighbors}`);
+  const startingTiles = {
+    N: {  S: "|", W: "J", E: "L" },
+    E: { W: "-", N: "L", S: "F" },
+    W: { E: "-", N: "J", S: "7" },
+    S: { N: "|", E: "F", W: "7" },
+  };
+
+  const tile = startingTiles[neighbors[0]][neighbors[1]];
+  if (!tile)
+    throw new Error("Failed to identify pipe type at starting tile");
+    
+  console.log(`neighbors: ${neighbors} starting tile: ${tile}`);
+
+  return { x: start.x, y: start.y, direction: neighbors[0], tile };
+}
+
+function part1(input) {
+  const rows = input.split("\n");
+  const start = findStart(rows);
 
   let dist = 0;
-  let dir = neighbors[0];
+  let dir = start.direction;
   let coords = start;
   while (true) {
     dist++;
@@ -243,12 +261,15 @@ function part1(input) {
       break;
 
     dir = getExitDirection(tile, dir);
-    console.log(`${dist} (${coords.x},${coords.y}) ${tile} => ${dir}`);
+    // console.log(`${dist} (${coords.x},${coords.y}) ${tile} => ${dir}`);
   }
 
   return dist / 2;
 }
 
+function part2(input) {
+
+}
 
 // expect 4, 4, 8, 8
 console.log(part1(sampleInput1));
