@@ -84,8 +84,4 @@ Start the flood fill there.
 [Insert flood fill logic here...]
 Once that's done we can count the number of empty tiles in odd rows and columns - those are the ones inside the loop.
 
-Could you e.g. start at the beginning of a row assuming outside and scan along the row marking tiles outside until you hit a pipe tile.
-Then scan until you hit another pipe tile indicating we're outside again and resume marking outside, repeating until end of row?
-Then repeat for each row?
-It's a loop so you *must* eventually hit another pipe tile right?
 
