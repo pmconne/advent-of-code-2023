@@ -325,4 +325,4 @@ console.log(part2(sampleInput1));
 console.log(part2(sampleInput2));
 console.log(part2(sampleInput3));
 console.log(part2(sampleInput4));
-console.log(part2(realInput));
+//console.log(part2(realInput));
