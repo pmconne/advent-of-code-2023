@@ -315,14 +315,51 @@ function part2(input) {
 }
 
 // expect 4, 4, 8, 8
-console.log(part1(sampleInput1));
-console.log(part1(sampleInput2));
-console.log(part1(sampleInput3));
-console.log(part1(sampleInput4));
-console.log(part1(realInput));
+// console.log(part1(sampleInput1));
+// console.log(part1(sampleInput2));
+// console.log(part1(sampleInput3));
+// console.log(part1(sampleInput4));
+// console.log(part1(realInput));
+
+// Encloses 4 tiles
+const sampleInput5 = `...........
+.S-------7.
+.|F-----7|.
+.||.....||.
+.||.....||.
+.|L-7.F-J|.
+.|..|.|..|.
+.L--J.L--J.
+...........`;
+
+// Encloses 4 tiles
+const sampleInput6 = `..........
+.S------7.
+.|F----7|.
+.||OOOO||.
+.||OOOO||.
+.|L-7F-J|.
+.|II||II|.
+.L--JL--J.
+..........`;
+
+// Encloses 8 tiles.
+const sampleInput7 = `.F----7F7F7F7F-7....
+.|F--7||||||||FJ....
+.||.FJ||||||||L7....
+FJL7L7LJLJ||LJ.L-7..
+L--J.L7...LJS7F-7L7.
+....F-J..F7FJ|L7L7L7
+....L7.F7||L7|.L7L7|
+.....|FJLJ|FJ|F7|.LJ
+....FJL-7.||.||||...
+....L---J.LJ.LJLJ...`;
 
 console.log(part2(sampleInput1));
 console.log(part2(sampleInput2));
 console.log(part2(sampleInput3));
 console.log(part2(sampleInput4));
+console.log(part2(sampleInput5));
+console.log(part2(sampleInput6));
+console.log(part2(sampleInput7));
 //console.log(part2(realInput));
