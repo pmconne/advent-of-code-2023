@@ -9,3 +9,56 @@ Add 1 to distance.
 Get coords of tile in desired direction.
 Get tile at those coords. If S => done.
 Else determine exit direction based on tile and entrance direction and repeat.
+
+Part 2
+
+Sounds like flood fill.
+There's no mechanism for crossing paths so the path must describe a closed region.
+Slipping between pipes though...
+Junk parts of pipe  (not necessarily connected or forming a loop) may exist. If they're inside the loop's bounded region they count.
+
+Mark each tile that is part of the loop.
+Flood-fill the interior.
+Or is it just a matter of: from a given tile, if I can reach the boundaries of the map the tile is not within the loop?
+
+X=part of loop
+O=outside of loop
+I=inside of loop
+B=perhaps-imaginary extra 1-tile-wide padding around the perimeter of the map
+
+I and O can never be adjacent.
+I and B can never be adjacent.
+X may be adjacent to anything.
+O must be transitively adjacent to B via O.
+
+I think slipping thru pipes is a problem. Yeah:
+..........
+.S------7.
+.|F----7|.
+.||OOOO||.
+.||OOOO||.
+.|L-7F-J|.
+.|II||II|.
+.L--JL--J.
+..........
+
+So each tile needs to encode the traversability in each of the 4 directions.
+Uh except slipping between pipes is about *pairs* of *adjacent* tiles...
+
+It is possible for a loop to enclose zero tiles:
+....
+.F7.
+.||.
+.LJ.
+....
+
+Or all tiles:
+F-7
+|.|
+L-J
+(. could be any random junk pipe piece instead)
+Installing a perimeter of empty boundary tiles would give us a known starting point for flood fill.
+
+Junk pipe tiles can't be traversed, only empty . tiles can be.
+So slipping between pipes is only relevant for empty tiles.
+	D
