@@ -1451,16 +1451,16 @@ function findLineOfReflection(rows, requiredDelta) {
   return undefined;
 }
 
-function part1(input) {
+function go(input, requiredDelta) {
   const patterns = parsePatterns(input);
   // console.log(patterns);
   let total = 0;
   for (const pattern of patterns) {
-    let line = findLineOfReflection(pattern.columns, 0);
+    let line = findLineOfReflection(pattern.columns, requiredDelta);
     if (undefined !== line) {
       total += line;
     } else {
-      line = findLineOfReflection(pattern.rows, 0);
+      line = findLineOfReflection(pattern.rows, requiredDelta);
       if (undefined === line)
         throw new Error("No line of reflection");
 
@@ -1471,5 +1471,15 @@ function part1(input) {
   return total;
 }
 
+function part1(input) {
+  return go(input, 0);
+}
+
+function part2(input) {
+  return go(input, 1);
+}
+
 console.log(part1(sampleInput));
 console.log(part1(realInput));
+console.log(part2(sampleInput));
+console.log(part2(realInput));
