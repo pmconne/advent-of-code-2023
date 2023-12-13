@@ -10,7 +10,7 @@ const sampleInput1 =
 .......#..
 #...#.....`;
 
-function createUniverse(input) {
+function parseGalaxies(input) {
   console.log(`${input}\n`);
   
   const grid = input.split("\n").map((row) => Array.from(row));
@@ -29,12 +29,20 @@ function createUniverse(input) {
     }
   }
 
-  return grid;
+  let galaxies = [];
+  for (let y = 0; y < grid.length; y++) {
+    const row = grid[y];
+    for (let x = 0; x < row.length; x++)
+      if (row[x] === "#")
+        galaxies.push({ x, y });
+  }
+
+  return galaxies;
 }
 
 function part1(input) {
-  const universe = createUniverse(input);
-  console.log(universe.map((row) => row.join("")).join("\n"));
+  const galaxies = parseGalaxies(input);
+  console.log(galaxies);
 }
 
 console.log(part1(sampleInput1));
