@@ -270,18 +270,20 @@ function part1(input) {
 function expandMap(rows) {
   const map = [];
   for (let i = 0; i < rows.length; i++) {
-    const mapRow = [];
+    const mapRow = ["."];
     const row = rows[i];
     for (let j = 0; j < row.length * 2; j++)
-      mapRow.push(" ");
+      mapRow.push(".");
 
   map.push(mapRow);
   map.push([...mapRow]);
   }
 
+  map.push([...map[0]]);
+
   const expandTile = (tile, pos) => {
-    const x = pos.x * 2;
-    const y = pos.y * 2;
+    const x = pos.x * 2 + 1;
+    const y = pos.y * 2 + 1;
     map[y][x] = tile;
     const directions = getDirections(tile);
     if (directions.includes("E"))

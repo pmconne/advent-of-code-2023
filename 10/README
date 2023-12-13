@@ -84,4 +84,5 @@ Start the flood fill there.
 [Insert flood fill logic here...]
 Once that's done we can count the number of empty tiles in odd rows and columns - those are the ones inside the loop.
 
-
+Starting with a known *outside* pixel may not fill every outside pixel if we're only padding the right and bottom with empty tiles.
+Need to pad the perimeter.
