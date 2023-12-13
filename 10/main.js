@@ -312,7 +312,8 @@ function expandMap(rows) {
 }
 
 function part2(input) {
-  const map = expandMap (input.split("\n"));
+  const inputMap = input.split("\n");
+  const map = expandMap (inputMap);
 
   let stack = [0, 0];
   const maybePush = (x, y) => {
@@ -334,6 +335,16 @@ function part2(input) {
   }
 
   console.log(map.map((x) => x.join("")).join("\n"));
+
+  let numInside = 0;
+  for (let y = 0; y < inputMap.length; y++) {
+    const row = inputMap[y];
+    for (let x = 0; x < inputMap[y].length; x++)
+      if (map[y * 2 + 1][x * 2 + 1] === ".")
+        ++numInside;
+  }
+
+  return numInside;
 }
 
 // expect 4, 4, 8, 8
@@ -377,11 +388,23 @@ L--J.L7...LJS7F-7L7.
 ....FJL-7.||.||||...
 ....L---J.LJ.LJLJ...`;
 
-console.log(part2(sampleInput1));
-console.log(part2(sampleInput2));
-console.log(part2(sampleInput3));
-console.log(part2(sampleInput4));
+const sampleInput8 = `FF7FSF7F7F7F7F7F---7
+L|LJ||||||||||||F--J
+FL-7LJLJ||||||LJL-77
+F--JF--7||LJLJ7F7FJ-
+L---JF-JLJ.||-FJLJJ7
+|F|F-JF---7F7-L7L|7|
+|FFJF7L7F-JF7|JL---7
+7-L-JL7||F7|L7F-7F7|
+L.L7LFJ|||||FJL7||LJ
+L7JLJL-JLJLJL--JLJ.L`;
+
+// console.log(part2(sampleInput1));
+// console.log(part2(sampleInput2));
+// console.log(part2(sampleInput3));
+// console.log(part2(sampleInput4));
 console.log(part2(sampleInput5));
 console.log(part2(sampleInput6));
 console.log(part2(sampleInput7));
+console.log(part2(sampleInput8));
 //console.log(part2(realInput));
