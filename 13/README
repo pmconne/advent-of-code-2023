@@ -1,3 +1,9 @@
 Sounds like there's expected to be exactly one line of reflection per pattern
 Compare adjacent pairs of rows/columns.
 If identical, compare neighbors until find mismatch or hit edge of pattern.
+
+--- Part 2
+
+Change comparison to count number of different characters.
+Change inner criterion to exactly one character difference.
+
