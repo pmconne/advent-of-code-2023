@@ -179,6 +179,9 @@ function getTile(rows, coords, direction) {
   if (direction)
     coords = getTileCoords(coords, direction);
 
+  if (!rows[coords.y])
+    return undefined;
+  
   return rows[coords.y][coords.x];
 }
 
@@ -388,7 +391,8 @@ L--J.L7...LJS7F-7L7.
 ....FJL-7.||.||||...
 ....L---J.LJ.LJLJ...`;
 
-const sampleInput8 = `FF7FSF7F7F7F7F7F---7
+const sampleInput8 =
+`FF7FSF7F7F7F7F7F---7
 L|LJ||||||||||||F--J
 FL-7LJLJ||||||LJL-77
 F--JF--7||LJLJ7F7FJ-
