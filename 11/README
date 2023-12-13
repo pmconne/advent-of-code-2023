@@ -1,3 +1,8 @@
 Given node index I find shortest path to each node with index > I.
 No obstructions in grid. Movement only up down left or right.
 Shortest path should be easy to find: at each step find delta x and delta y, move in the direction of the largest |delta|.
+
+Part 2
+
+Sounds like they want weights applied to each tile - i.e., any tile in a completely empty column/row has a weight of 1,000,000.
+Probably supposed to use Dijstrka.
