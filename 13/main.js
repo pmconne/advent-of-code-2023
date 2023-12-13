@@ -1424,11 +1424,11 @@ function findLineOfReflection(rows, requiredDelta) {
   for (let i = 1; i < rows.length; i++) {
     let a = rows[i - 1];
     let b = rows[i];
-    if (a !== b)
+    let totalDelta = computeDelta(a, b);
+    if (totalDelta > requiredDelta)
       continue;
 
     let j = 1;
-    let totalDelta = 0;
     while (true) {
       if (i - j === 0 || i + j === rows.length) {
         if (totalDelta === requiredDelta)
