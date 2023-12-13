@@ -313,6 +313,26 @@ function expandMap(rows) {
 
 function part2(input) {
   const map = expandMap (input.split("\n"));
+
+  let stack = [0, 0];
+  const maybePush = (x, y) => {
+    const row = map[y];
+    if (row && row[x] === ".") {
+      stack.push(x);
+      stack.push(y);
+    }
+  };
+  
+  while (stack.length > 0) {
+    const y = stack.pop();
+    const x = stack.pop();
+    maybePush(x + 1, y);
+    maybePush(x - 1, y);
+    maybePush(x, y + 1);
+    maybePush(x, y - 1); 
+    map[y][x] = "*";
+  }
+
   console.log(map.map((x) => x.join("")).join("\n"));
 }
 
