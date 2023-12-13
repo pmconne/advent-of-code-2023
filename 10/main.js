@@ -411,4 +411,4 @@ console.log(part2(sampleInput5));
 console.log(part2(sampleInput6));
 console.log(part2(sampleInput7));
 console.log(part2(sampleInput8));
-//console.log(part2(realInput));
+console.log(part2(realInput));
