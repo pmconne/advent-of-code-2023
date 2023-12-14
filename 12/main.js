@@ -1089,8 +1089,8 @@ function part1(input) {
 function part2(input) {
   const map = parse(input).map((row) => {
     return {
-      springs: row.springs.replaceAll("?", "?????"),
-      groups: row.groups,
+      springs: `${row.springs}?${row.springs}?${row.springs}?${row.springs}?${row.springs}`,
+      groups: [...row.groups, ...row.groups, ...row.groups, ...row.groups, ...row.groups],
     };
   });
 
