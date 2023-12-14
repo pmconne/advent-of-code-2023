@@ -194,8 +194,8 @@ function computeShortestPathLength(start, end, universe) {
   return computeDistance(start.x, end.x, universe.xDistances) + computeDistance(start.y, end.y, universe.yDistances);
 }
 
-function part1(input) {
-  const universe = parseUniverse(input, 2);
+function solve(input, emptyDistance) {
+  const universe = parseUniverse(input, emptyDistance);
   const galaxies = universe.galaxies;
   let totalDistance = 0;
   for (let i = 0; i < galaxies.length; i++) {
@@ -209,5 +209,15 @@ function part1(input) {
   return totalDistance;
 }
 
-console.log(part1(sampleInput1));
-console.log(part1(realInput));
+// Part 1
+console.log(solve(sampleInput1, 2));
+console.log(solve(realInput, 2));
+
+// Part 2 example - expand by 10, expect 1030
+console.log(solve(sampleInput1, 10));
+
+// Part 2 example - expand by 100, expect 8410
+console.log(solve(sampleInput1, 100));
+
+// Part 2
+console.log(solve(realInput, 1000000));
