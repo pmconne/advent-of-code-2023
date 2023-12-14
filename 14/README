@@ -1,0 +1,10 @@
+
+establish an imaginary perimeter of #.
+to tilt north, start at (0,0) and scan south until out of bounds
+initial blockadePos = -1 unless we insert actual perimeter tiles.
+	# => blockadePos = cur
+	. => nothing
+	O => if blockadePos + 1 < cur:
+		*cur = .; *blockadePos++ = O
+	
+
