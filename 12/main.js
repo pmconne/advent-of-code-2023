@@ -1047,6 +1047,7 @@ function countArrangements(row) {
     if (undefined !== cached)
       return cached;
 
+    // console.log(`${key}`);
     if (springIndex === row.springs.length) {
       // End of input.
       return (groupIndex === row.groups.length && blockSize === 0)
@@ -1074,7 +1075,7 @@ function countArrangements(row) {
       numSolutions += countSolutions(springIndex + 1, groupIndex, blockSize + 1);
     }
 
-    cache[key] = numSolutions;
+    cache.set(key, numSolutions);
     return numSolutions;
   };
 
