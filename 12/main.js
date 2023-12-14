@@ -1094,10 +1094,14 @@ function part2(input) {
     };
   });
 
-  return map.map((row) => countArrangements(row)).reduce((prev, cur) => prev + cur, 0);
+  return map.map((row, index) => {
+    console.log(`${index + 1}/${map.length}`);
+    return countArrangements(row);
+  }).reduce((prev, cur) => prev + cur, 0);
 }
 
 console.log(part1(sampleInput));
 console.log(part1(realInput));
 
 console.log(part2(sampleInput));
+console.log(part2(realInput));
