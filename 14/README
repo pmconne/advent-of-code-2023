@@ -6,5 +6,11 @@ initial blockadePos = -1 unless we insert actual perimeter tiles.
 	. => nothing
 	O => if blockadePos + 1 < cur:
 		*cur = .; *blockadePos++ = O
-	
+
+Part 2:
+
+Seems like it ought to get caught in a loop pretty quickly.
+Have to detect when it does.
+Store a record of the configuration after each spin cycle. Just stringify the grid.
+
 

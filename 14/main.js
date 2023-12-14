@@ -151,14 +151,43 @@ function computeNorthLoad(grid) {
   return totalLoad;
 }
 
+function rotateClockwise(grid) {
+  return grid.map((row, y) => row.map((_, x) => grid[row.length - x - 1][y]));
+}
+
+function spin(grid) {
+  for (let i = 0; i < 4; i++) {
+    tiltNorth(grid);
+    grid = rotateClockwise(grid);
+  }
+
+  return grid;
+}
+
+function stringifyGrid(grid) {
+  return grid.map((x) => x.join("")).join("\n");
+}
+
 function part1(input) {
   const grid = parseGrid(input);
-  console.log(grid.map((x) => x.join("")).join("\n"));
+  console.log(stringifyGrid(grid));
   console.log("  =>");
   tiltNorth(grid);
-  console.log(grid.map((x) => x.join("")).join("\n"));
+  console.log(stringifyGrid(grid));
   return computeNorthLoad(grid);
 }
 
-console.log(part1(sampleInput));
-console.log(part1(realInput));
+// console.log(part1(sampleInput));
+// console.log(part1(realInput));
+
+const simpleInput =
+`.#.
+.#.
+..#`;
+
+const grid = parseGrid(simpleInput);
+const rotated = rotateClockwise(grid);
+console.log(`${stringifyGrid(grid)}\n  =>\n${stringifyGrid(rotated)}`);
+const spun = spin(grid);
+if (stringifyGrid(grid) !== stringifyGrid(spun))
+  throw new Error("wuh-oh");
