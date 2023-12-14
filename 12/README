@@ -9,3 +9,13 @@ I guess whenever you hit a ? you must branch and evaluate all possible sub-solut
 Could brute-force by simply producing an exhaustive list of all possible combinations, then count how many satisfy the criterion.
 Might be too slow...try it on the sample input.
 
+Part 2:
+
+Uh this is definitely going to take too long using current approach...
+Find out exactly how long on sample input.
+Yeah, way too slow.
+
+The list of group sizes is the pattern we have to match. Turn it into a regex.
+	No, NFA.
+
+

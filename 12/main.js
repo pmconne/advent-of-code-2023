@@ -1046,7 +1046,7 @@ function countArrangements(row) {
       ++numMatches;
   }
 
-  console.log(`${row.springs} => ${numMatches}`);
+  // console.log(`${row.springs} => ${numMatches}`);
   return numMatches;
 }
 
@@ -1055,5 +1055,18 @@ function part1(input) {
   return map.map((row) => countArrangements(row)).reduce((prev, cur) => prev + cur, 0);
 }
 
+function part2(input) {
+  const map = parse(input).map((row) => {
+    return {
+      springs: row.springs.replaceAll("?", "?????"),
+      groups: row.groups,
+    };
+  });
+
+  return map.map((row) => countArrangements(row)).reduce((prev, cur) => prev + cur, 0);
+}
+
 console.log(part1(sampleInput));
 console.log(part1(realInput));
+
+// console.log(part2(sampleInput));
