@@ -1,0 +1,11 @@
+# = damaged
+. = operational
+? = # | .
+Followed by list of the number of # in each group
+Groups of # are always separated by at least one .
+
+I guess whenever you hit a ? you must branch and evaluate all possible sub-solutions from that position to end.
+	i.e., evaluate for . and for #.
+Could brute-force by simply producing an exhaustive list of all possible combinations, then count how many satisfy the criterion.
+Might be too slow...try it on the sample input.
+
