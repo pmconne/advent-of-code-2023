@@ -152,24 +152,22 @@ const realInput =
 ..........................#...................#......#....................#...................#.............................#.....#......#..
 ......#.........#.................#..............................#..................#...............#........#..............................`;
 
-function parseGalaxies(input) {
-  console.log(`${input}\n`);
-  
+function parseUniverse(input, emptyDistance) {
+  // Initially every tile is 1 unit in size.
   const grid = input.split("\n").map((row) => Array.from(row));
+  const yDistances = grid.map(() => 1);
+  const xDistances = grid[0].map(() => 1);
+
+  // Find expanded rows+columns
   for (let y = 0; y < grid.length; y++) {
     const row = grid[y];
     if (row.every((x) => x === "."))
-      grid.splice(y++, 0, [...row]);
+      yDistances[y] = emptyDistance;
   }
 
-  for (let x = 0; x < grid[0].length; x++) {
-    if (grid.every((row) => row[x] === ".")) {
-      for (const row of grid)
-        row.splice(x, 0, ".");
-
-      x++;
-    }
-  }
+  for (let x = 0; x < grid[0].length; x++)
+    if (grid.every((row) => row[x] === "."))
+      xDistances[x] = emptyDistance;
 
   let galaxies = [];
   for (let y = 0; y < grid.length; y++) {
@@ -179,32 +177,32 @@ function parseGalaxies(input) {
         galaxies.push({ x, y });
   }
 
-  return galaxies;
+  return { galaxies, xDistances, yDistances };
 }
 
-function computeShortestPathLength(start, end) {
-  const dx = end.x - start.x;
-  const dy = end.y - start.y;
-  if (dx === 0 && dy === 0)
-    return 0;
+function computeDistance(start, end, distances) {
+  let s = Math.min(start, end);
+  let e = Math.max(start, end);
+  let distance = 0;
+  while (s < e)
+    distance += distances[s++];
 
-  const next = { ...start };
-  if (Math.abs(dx) > Math.abs(dy))
-    next.x += dx > 0 ? 1 : -1;
-  else
-    next.y += dy > 0 ? 1 : -1;
-
-  return 1 + computeShortestPathLength(next, end);
+  return distance;
+}
+  
+function computeShortestPathLength(start, end, universe) {
+  return computeDistance(start.x, end.x, universe.xDistances) + computeDistance(start.y, end.y, universe.yDistances);
 }
 
 function part1(input) {
-  const galaxies = parseGalaxies(input);
+  const universe = parseUniverse(input, 2);
+  const galaxies = universe.galaxies;
   let totalDistance = 0;
   for (let i = 0; i < galaxies.length; i++) {
     for (let j = i + 1; j < galaxies.length; j++) {
-      const distance = computeShortestPathLength(galaxies[i], galaxies[j]);
+      const distance = computeShortestPathLength(galaxies[i], galaxies[j], universe);
       totalDistance += distance;
-      console.log(`${i+1} => ${j+1} = ${distance}`);
+//       console.log(`${i+1} => ${j+1} = ${distance}`);
     }
   }
 

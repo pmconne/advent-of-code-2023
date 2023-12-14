@@ -6,3 +6,11 @@ Part 2
 
 Sounds like they want weights applied to each tile - i.e., any tile in a completely empty column/row has a weight of 1,000,000.
 Probably supposed to use Dijstrka.
+Except, if we can only move in 4 directions then the shortest path is always the same length whether you go all the way along one axis then along the other,
+or stair-step along a diagonal.
+So path-finding shouldn't be needed - shortest distance is just delta x + delta y.
+
+Could add 1m to each galaxy coordinate for each empty row/column preceding it.
+Then existing algo would work (but slow...)
+Maybe just add the extra distances for empty rows/columns when computing shortest path.
+
