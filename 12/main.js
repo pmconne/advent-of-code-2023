@@ -1037,17 +1037,48 @@ function countDamagedGroups(springs) {
 }
 
 function countArrangements(row) {
-  const arrangements = [];
-  collectArrangements(row.springs, arrangements);
-  let numMatches = 0;
-  for (const arrangement of arrangements) {
-    const groups = countDamagedGroups(arrangement);
-    if (groups.length === row.groups.length && groups.every((value, index) => value === row.groups[index]))
-      ++numMatches;
-  }
+  // Cache key is { springIndex, groupIndex, blockSize }, stringified.
+  // value is the previously-obtained number of solutions for the key.
+  const cache = new Map();
 
-  // console.log(`${row.springs} => ${numMatches}`);
-  return numMatches;
+  const countSolutions = (springIndex, groupIndex, blockSize) => {
+    const key = `${springIndex}.${groupIndex}.${blockSize}`;
+    const cached = cache.get(key);
+    if (undefined !== cached)
+      return cached;
+
+    if (springIndex === row.springs.length) {
+      // End of input.
+      return (groupIndex === row.groups.length && blockSize === 0)
+        || (groupIndex === row.groups.length - 1 && blockSize === row.groups[row.groups.length - 1])
+        ? 1 : 0;
+    }
+
+    let numSolutions = 0;
+    const spring = row.springs[springIndex];
+    if (spring === "." || spring === "?") {
+      // process as a "."
+      if (0 === blockSize) {
+        numSolutions += countSolutions(springIndex + 1, groupIndex, 0);
+      } else {
+        if (groupIndex === row.groups.length)
+          return 0;
+
+        if (blockSize === row.groups[groupIndex])
+          numSolutions += countSolutions(springIndex + 1, groupIndex + 1, 0);
+      }
+    }
+
+    if (spring === "#" || spring === "?") {
+      // process as a "#"
+      numSolutions += countSolutions(springIndex + 1, groupIndex, blockSize + 1);
+    }
+
+    cache[key] = numSolutions;
+    return numSolutions;
+  };
+
+  return countSolutions(0, 0, 0);
 }
 
 function part1(input) {
@@ -1069,4 +1100,4 @@ function part2(input) {
 console.log(part1(sampleInput));
 console.log(part1(realInput));
 
-// console.log(part2(sampleInput));
+console.log(part2(sampleInput));

@@ -17,5 +17,9 @@ Yeah, way too slow.
 
 The list of group sizes is the pattern we have to match. Turn it into a regex.
 	No, NFA.
-
+Given N1, N2, ... Nn group sizes the pattern is
+	.* #N1 .+ #N2 .+ ... #Nn .*
+So e.g. 1,3,2 becomes .+#.+###.+##.+
+But we don't just want to know if the input matches the pattern - we want to know exactly how many resolutions of the input match the pattern.
+We just have to cache any branches we've already solved.
 
