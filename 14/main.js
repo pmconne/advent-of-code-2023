@@ -177,17 +177,38 @@ function part1(input) {
   return computeNorthLoad(grid);
 }
 
+function part2(input) {
+  let grid = parseGrid(input);
+  const gridToSpinCount = new Map();
+  let cycle;
+  for (let spinCount = 1; spinCount <= 1000000000; spinCount++) {
+    grid = spin(grid);
+    const str = stringifyGrid(grid);
+    const prevSpinCount = gridToSpinCount.get(str);
+    // console.log(`${spinCount}\n${str}`);
+    if (undefined !== prevSpinCount) {
+      cycle = { start: prevSpinCount, length: spinCount - prevSpinCount };
+      break;
+    }
+
+    gridToSpinCount.set(str, spinCount);
+  }
+
+  if (!cycle)
+    throw new Error("No cycles detected and you have way too much patience.");
+
+  console.log(`Cycle detected: ${JSON.stringify(cycle)}`);
+
+  let nSpins = 1000000000 - cycle.start;
+  nSpins = nSpins % cycle.length;
+  console.log(`Performing ${nSpins} additional spins`);
+  for (let i = 0; i < nSpins; i++)
+    grid = spin(grid);
+
+  return computeNorthLoad(grid);
+}
+
 // console.log(part1(sampleInput));
 // console.log(part1(realInput));
 
-const simpleInput =
-`.#.
-.#.
-..#`;
-
-const grid = parseGrid(simpleInput);
-const rotated = rotateClockwise(grid);
-console.log(`${stringifyGrid(grid)}\n  =>\n${stringifyGrid(rotated)}`);
-const spun = spin(grid);
-if (stringifyGrid(grid) !== stringifyGrid(spun))
-  throw new Error("wuh-oh");
+console.log(part2(sampleInput));

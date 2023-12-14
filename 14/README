@@ -13,4 +13,9 @@ Seems like it ought to get caught in a loop pretty quickly.
 Have to detect when it does.
 Store a record of the configuration after each spin cycle. Just stringify the grid.
 
+So we know where the cycle starts and its length.
+N spins = 1billion.
+N -= cycle start
+extra spins = N % cycle length
+spin that many times then measure load.
 
