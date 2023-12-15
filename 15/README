@@ -1,0 +1,9 @@
+Part 2
+
+hash(lens label) => box number (hash table index)
+label- : rm from slot lens w/ label
+label=focalLength :
+	label already present in box? change focal length
+	else append to list
+
+It's just a map<u8, list<{label, length}>>
