@@ -213,5 +213,27 @@ function part1(input) {
   return countEnergized(map, {x: 0, y: 0}, {x: 1, y: 0});
 }
 
+function part2(input) {
+  const map = parseMap(input);
+  if (map.length !== map[0].length)
+    throw new Error("Expected a square map");
+
+  const edge = map.length - 1;
+  let maxHot = 0;
+  for (let i = 0; i < map.length; i++) {
+    maxHot = Math.max(
+      maxHot,
+      countEnergized(map, {x: 0, y: i}, {x: 1, y: 0}),
+      countEnergized(map, {x: edge, y: i}, {x: -1, y: 0}),
+      countEnergized(map, {x: i, y: 0}, {x: 0, y: 1}),
+      countEnergized(map, {x:i, y: edge}, {x: 0, y: -1})
+    );
+  }
+
+  return maxHot;
+}
+
 console.log(part1(sampleInput));
 console.log(part1(realInput));
+console.log(part2(sampleInput));
+console.log(part2(realInput));
