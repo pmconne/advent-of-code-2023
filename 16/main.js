@@ -15,7 +15,7 @@ const sampleInput = String.raw
 function parseMap(input) {
   return input.split("\n").map((row) => {
     return Array.from(row).map((symbol) => {
-      return { symbol };
+      return { symbol, visitedFrom: [] };
     });
   });
 }
@@ -31,10 +31,12 @@ function tracePath(map, pos, dir, beamGeneration = 0) {
   while (true) {
     const row = map[pos.y];
     const tile = row ? row[pos.x] : undefined;
-    if (!tile)
+    if (!tile || undefined !== tile.visitedFrom.find((v) => v.x === dir.x && v.y === dir.y))
       return;
     
     tile.hot = true;
+    tile.visitedFrom.push({ ...dir });
+
     console.log(`${beamGeneration} ${tile.symbol} p=(${pos.x},${pos.y}) d=(${dir.x},${dir.y})`);
     switch (tile.symbol) {
       case ".":
@@ -88,9 +90,7 @@ function prettify(map) {
 
 function part1(input) {
   const map = parseMap(input);
-  try {
-    tracePath(map, { x: 0, y: 0 }, { x: 1, y: 0 });
-  } catch (_) { }
+  tracePath(map, { x: 0, y: 0 }, { x: 1, y: 0 });
   console.log(prettify(map));
   return map.reduce((accum, row) => row.reduce((accum, tile) => accum + tile.hot ? 1 : 0, accum), 0);
 }

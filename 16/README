@@ -3,3 +3,6 @@ Enters from northwest, traveling west.
 Continues until it exits the boundaries of the grid.
 Assuming no loops (beams all eventually exit)?
 
+Nope there are cycles.
+Record on each hot tile the directions from which we previously entered it, don't re-enter from same direction.
+
