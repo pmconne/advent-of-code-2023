@@ -92,7 +92,7 @@ function part1(input) {
   const map = parseMap(input);
   tracePath(map, { x: 0, y: 0 }, { x: 1, y: 0 });
   console.log(prettify(map));
-  return map.reduce((accum, row) => row.reduce((accum, tile) => accum + tile.hot ? 1 : 0, accum), 0);
+  return map.map((row) => row.reduce((accum, tile) => accum + (tile.hot ? 1 : 0), 0)).reduce((accum, rowSum) => accum + rowSum, 0);
 }
 
 console.log(part1(sampleInput));
