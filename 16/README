@@ -6,3 +6,5 @@ Assuming no loops (beams all eventually exit)?
 Nope there are cycles.
 Record on each hot tile the directions from which we previously entered it, don't re-enter from same direction.
 
+Part 2
+Could brute force it and cache on each tile the number of tiles that get energized when entering from a given direction.

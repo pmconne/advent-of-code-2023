@@ -200,11 +200,17 @@ function prettify(map) {
   return map.map((row) => row.map((tile) => tile.hot ? "#" : tile.symbol).join("")).join("\n");
 }
 
+function countEnergized(map, pos, dir) {
+  tracePath(map, pos, dir);
+  console.log(prettify(map));
+  const numHot = map.map((row) => row.reduce((accum, tile) => accum + (tile.hot ? 1 : 0), 0)).reduce((accum, rowSum) => accum + rowSum, 0);
+  map.forEach((row) => row.forEach((tile) => { tile.hot = false; tile.visitedFrom.length = 0; }));
+  return numHot;
+}
+
 function part1(input) {
   const map = parseMap(input);
-  tracePath(map, { x: 0, y: 0 }, { x: 1, y: 0 });
-  console.log(prettify(map));
-  return map.map((row) => row.reduce((accum, tile) => accum + (tile.hot ? 1 : 0), 0)).reduce((accum, rowSum) => accum + rowSum, 0);
+  return countEnergized(map, {x: 0, y: 0}, {x: 1, y: 0});
 }
 
 console.log(part1(sampleInput));
