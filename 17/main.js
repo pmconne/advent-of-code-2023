@@ -405,3 +405,4 @@ const sampleInput2 =
 
 console.log(part2(sampleInput));
 console.log(part2(sampleInput2));
+console.log(part2(realInput));
