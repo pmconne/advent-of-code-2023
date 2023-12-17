@@ -350,7 +350,7 @@ function shortestPath(weights, minSteps, maxSteps) {
   while(!q.isEmpty) {
     let smallest = q.pop()[1];
 
-    if(smallest.x === endX && smallest.y === endY) {
+    if(smallest.x === endX && smallest.y === endY && smallest.steps >= minSteps) {
       const pathLength = distances[smallest.key];
       const path = [];
 
