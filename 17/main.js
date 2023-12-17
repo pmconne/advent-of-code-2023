@@ -327,10 +327,12 @@ function shortestPath(weights, minSteps, maxSteps) {
         neighbors.push(makeNode(pos.x, pos.y, dirName, steps));
     };
     
-    for (let steps = node.steps + 1; steps <= maxSteps; steps++)
-      addNeighbor(node, node.dir, steps);
+    // for (let steps = node.steps + 1; steps <= maxSteps; steps++)
+    //   addNeighbor(node, node.dir, steps);
+    if (node.steps + 1 <= maxSteps)
+      addNeighbor(node, node.dir, node.steps + 1);
 
-    if (node.steps > minSteps) {
+    if (node.steps >= minSteps) {
       const turns = directions[node.dir][0] ? ["N", "S"] : ["E", "W"];
       for (const turn of turns)
         addNeighbor(node, turn, 1);
