@@ -304,7 +304,7 @@ function makeNode(x, y, dir, steps) {
   return { x, y, dir, steps, key };
 }
 
-const directions = { E: [1, 0], S: [0, 1], W: [-1, 0], N: [0, -1] };
+const directions = { E: [1, 0, ">"], S: [0, 1, "v"], W: [-1, 0,"<"], N: [0, -1,"^"] };
 
 function move(pos, dirName) {
   const dir = directions[dirName];
@@ -358,7 +358,11 @@ function shortestPath(weights, minSteps, maxSteps) {
         smallest = previous[smallest.key];
       }
 
-      console.log(path);
+      const map = weights.map((row) => row.map((wt) => `${wt}`));
+      for (const node of path)
+        map[node.y][node.x] = directions[node.dir][2];
+      
+      console.log(map.map((row) => row.join("")).join("\n"));
       return pathLength;
     }
 
