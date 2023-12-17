@@ -144,66 +144,52 @@ class PriorityQueue {
  * Pathfinding starts here
  */
 function Graph(){
-  var INFINITY = 1/0;
   this.vertices = {};
 
   this.addVertex = function(name, edges){
     this.vertices[name] = edges;
   };
+}
 
-  this.shortestPath = function (start, finish) {
-    var nodes = new PriorityQueue((a, b) => a[0] - b[0]),
-        distances = {},
-        previous = {},
-        path = [],
-        smallest, vertex, neighbor, alt;
+function shortestPath(start, finish, getNeighbors, distanceToNode) {
+  var nodes = new PriorityQueue((a, b) => a[0] - b[0]),
+      distances = {},
+      previous = {},
+      path = [],
+      smallest, neighbor, alt;
 
-    for(vertex in this.vertices) {
-      if(vertex === start) {
-        distances[vertex] = 0;
-        nodes.push([0, vertex]);
+  distances[start] = 0;
+  nodes.push([0, start]);
+
+  while(!nodes.isEmpty) {
+    console.log(nodes._array);
+    smallest = nodes.pop()[1];
+
+    if(smallest === finish) {
+      path = [];
+
+      while(previous[smallest]) {
+        path.push(smallest);
+        smallest = previous[smallest];
       }
-      else {
-        distances[vertex] = INFINITY;
-        // nodes.enqueue(INFINITY, vertex);
-      }
 
-      previous[vertex] = null;
+      break;
     }
 
-    while(!nodes.isEmpty) {
-      console.log(nodes._array);
-      smallest = nodes.pop()[1];
+    const neighbors = getNeighbors(smallest);
+    for(neighbor in neighbors) {
+      alt = distances[smallest] + distanceToNode(smallest, neighbor);
 
-      if(smallest === finish) {
-        path = [];
+      if(undefined === distances[neighbor] || alt < distances[neighbor]) {
+        distances[neighbor] = alt;
+        previous[neighbor] = smallest;
 
-        while(previous[smallest]) {
-          path.push(smallest);
-          smallest = previous[smallest];
-        }
-
-        break;
-      }
-
-      // if(!smallest || distances[smallest] === INFINITY){
-      //   continue;
-      // }
-
-      for(neighbor in this.vertices[smallest]) {
-        alt = distances[smallest] + this.vertices[smallest][neighbor];
-
-        if(alt < distances[neighbor]) {
-          distances[neighbor] = alt;
-          previous[neighbor] = smallest;
-
-          nodes.push([alt, neighbor]);
-        }
+        nodes.push([alt, neighbor]);
       }
     }
+  }
 
-    return path;
-  };
+  return path;
 }
 
 var g = new Graph();
@@ -217,5 +203,8 @@ g.addVertex('F', {B: 2, C: 6, D: 8, G: 9, H: 3});
 g.addVertex('G', {C: 4, F: 9});
 g.addVertex('H', {E: 1, F: 3});
 
+const getNeighbors = (node) => g.vertices[node];
+const distanceToNode = (from, to) => g.vertices[from][to];
+
 // Log test, with the addition of reversing the path and prepending the first node so it's more readable
-console.log(g.shortestPath('A', 'H').concat(['A']).reverse());
+console.log(shortestPath('A', 'H', getNeighbors, distanceToNode).concat(['A']).reverse());
