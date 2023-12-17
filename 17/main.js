@@ -316,8 +316,8 @@ function shortestPath(weights, minSteps, maxSteps) {
   const distances = {};
   const previous = {};
 
-  const endX = weights.length - 1;
-  const endY = weights[0].length - 1;
+  const endY = weights.length - 1;
+  const endX = weights[0].length - 1;
   
   function getNeighbors(node) {
     const neighbors = [];
@@ -348,7 +348,6 @@ function shortestPath(weights, minSteps, maxSteps) {
   q.push([0, s1]);
 
   while(!q.isEmpty) {
-    // console.log(q._array);
     let smallest = q.pop()[1];
 
     if(smallest.x === endX && smallest.y === endY) {
@@ -370,7 +369,6 @@ function shortestPath(weights, minSteps, maxSteps) {
 
     const neighbors = getNeighbors(smallest);
     for(const neighbor of neighbors) {
-      // console.log(neighbor);
       const alt = distances[smallest.key] + weights[neighbor.y][neighbor.x];
 
       if(undefined === distances[neighbor.key] || alt < distances[neighbor.key]) {
