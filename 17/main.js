@@ -311,7 +311,7 @@ function move(pos, dirName) {
   return { x: pos.x + dir[0], y: pos.y + dir[1] };
 }
   
-function shortestPath(weights) {
+function shortestPath(weights, minSteps, maxSteps) {
   const q = new PriorityQueue((a, b) => a[0] - b[0]);
   const distances = {};
   const previous = {};
@@ -327,12 +327,14 @@ function shortestPath(weights) {
         neighbors.push(makeNode(pos.x, pos.y, dirName, steps));
     };
     
-    for (let steps = node.steps + 1; steps < 3; steps++)
+    for (let steps = node.steps + 1; steps < maxSteps; steps++)
       addNeighbor(node, node.dir, steps);
 
-    const turns = directions[node.dir][0] ? ["N", "S"] : ["E", "W"];
-    for (const turn of turns)
-      addNeighbor(node, turn, 0);
+    if (node.steps >= minSteps) {
+      const turns = directions[node.dir][0] ? ["N", "S"] : ["E", "W"];
+      for (const turn of turns)
+        addNeighbor(node, turn, 0);
+    }
 
     return neighbors;
   }
@@ -377,7 +379,7 @@ function shortestPath(weights) {
 
 function part1(input) {
   const weights = input.split("\n").map((row) => row.split("").map((wt) => Number.parseInt(wt)));
-  const path = shortestPath(weights);
+  const path = shortestPath(weights, 0, 3);
   console.log(path);
 }
 
