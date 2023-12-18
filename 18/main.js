@@ -789,5 +789,24 @@ function part1(input) {
   return area + (perimeter / 2) + 1;
 }
 
-console.log(part1(sampleInput));
-console.log(part1(realInput));
+function part2(input) {
+  const polygon = parsePolygon(input, (row) => {
+    const parts = row.split("#");
+    const encoded = parts[1].split(")")[0];
+    const hex = Number.parseInt(encoded, 16);
+    const dist = hex >> 4;
+    const dirIdx = hex & 0xf;
+    const dirs = [ [1,0], [0,1], [-1,0], [0,-1] ];
+    const dir = dirs[dirIdx];
+    return { x: dir[0] * dist, y: dir[1] * dist };
+  });
+
+  console.log(polygon);
+  const area = computeArea(polygon);
+  const perimeter = computePerimeter(polygon);
+  return area + (perimeter / 2) + 1;
+}
+
+// console.log(part1(sampleInput));
+// console.log(part1(realInput));
+console.log(part2(sampleInput));
