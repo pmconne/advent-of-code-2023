@@ -1,0 +1,6 @@
+
+Flood fill again?
+Size of grid unknown at start? Could be determined by adding up all LR and UD movement.
+Brute-force part 1. Presumably the RGB values will be relevant in part 2.
+
+
