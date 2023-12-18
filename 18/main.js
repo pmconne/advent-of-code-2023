@@ -817,13 +817,15 @@ function part1(input) {
   const map = computeStartingMap(plan);
   dig(map, plan);
   console.log("Dug:");
-  printGrid(map.grid);
+  // printGrid(map.grid);
 
   const sx = map.ox + 1;
   const sy = map.oy + 1;
   flood(map.grid, sx, sy);
   console.log("Flooded:");
-  printGrid(map.grid);
+  // printGrid(map.grid);
+
+  return map.grid.map((row) => row.reduce((prev, cur) => prev + (cur === "#" ? 1 : 0), 0)).reduce((prev, cur) => prev + cur, 0);
 }
 
 console.log(part1(sampleInput));
