@@ -761,7 +761,6 @@ function computeStartingMap(plan) {
     }
   }
     
-  // Install a 1 unit perimeter of undug tiles
   const w = r - l + 1;
   const h = d - u + 1;
   const ox = -l;
@@ -775,12 +774,12 @@ function computeStartingMap(plan) {
       row.push(x === ox && y === oy ? "#" : ".");
   }
 
-  printGrid(grid);
   return { grid, ox, oy };
 }
 
+const dirs = { "L": [-1, 0], "R": [1, 0], "U": [0, -1], "D": [0, 1] };
+
 function dig(map, plan) {
-  const dirs = { "L": [-1, 0], "R": [1, 0], "U": [0, -1], "D": [0, 1] };
   let x = map.ox, y = map.oy;
   let grid = map.grid;
   for (const step of plan) {
@@ -789,17 +788,43 @@ function dig(map, plan) {
       x += dx;
       y += dy;
       grid[y][x] = "#";
-      printGrid(grid);
+      // printGrid(grid);
     }
   }
+}
 
+function flood(grid, x, y) {
+  const stack = [x, y];
+  function maybePush(a, b) {
+    const row = grid[b];
+    if (row && "." === row[a])
+      stack.push(a, b);
+  }
+      
+  while (stack.length > 0) {
+    y = stack.pop();
+    x = stack.pop();
+    grid[y][x] = "#";
+    maybePush(x + 1, y);
+    maybePush(x - 1, y);
+    maybePush(x, y + 1);
+    maybePush(x, y - 1);
+  }
 }
 
 function part1(input) {
   const plan = parsePlan(input);
   const map = computeStartingMap(plan);
   dig(map, plan);
+  console.log("Dug:");
+  printGrid(map.grid);
+
+  const sx = map.ox + 1;
+  const sy = map.oy + 1;
+  flood(map.grid, sx, sy);
+  console.log("Flooded:");
+  printGrid(map.grid);
 }
 
 console.log(part1(sampleInput));
-// console.log(part1(realInput));
+console.log(part1(realInput));
