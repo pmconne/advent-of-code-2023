@@ -810,3 +810,4 @@ function part2(input) {
 // console.log(part1(sampleInput));
 // console.log(part1(realInput));
 console.log(part2(sampleInput));
+console.log(part2(realInput));
