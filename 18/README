@@ -12,3 +12,6 @@ Yeah flood-filling a grid's not gonna work this time.
 Need area of a polygon (non-convex).
 https://stackoverflow.com/questions/34326728/how-do-i-calculate-the-area-of-a-non-convex-polygon
 
+Hmm after adding perimeter to computed area I'm over for part 1. In both inputs by perimeter/2 + 1.
+Probably bc grid?
+

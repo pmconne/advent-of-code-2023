@@ -755,8 +755,21 @@ function computeArea(polygon) {
   for (let i = 0; i < N - 2; i++)
     area += -polygon[i].y * polygon[i+1].x + polygon[i].x * polygon[i+1].y;
 
-  area += -polygon[N-1].y * polygon[0].x + polygon[N-1].x * polygon[0].y;
-  return 0.5 * Math.abs(area);
+  area = 0.5 * Math.abs(area);
+  console.log(`area: ${area}`);
+  return area;
+}
+
+function computePerimeter(polygon) {
+  let perimeter = 0;
+  for (let i = 0; i < polygon.length - 1; i++) {
+    const p0 = polygon[i];
+    const p1 = polygon[i+1];
+    perimeter += Math.abs(p0.x - p1.x) + Math.abs(p0.y - p1.y);
+  }
+
+  console.log(`perimeter: ${perimeter}`);
+  return perimeter;
 }
 
 function part1(input) {
@@ -768,9 +781,13 @@ function part1(input) {
     return { x: dir[0] * dist, y: dir[1] * dist };
   });
     
-  console.log(polygon);
-  return computeArea(polygon);
+  // const polygon = [{x:0,y:0}, {x:10,y:0}, {x:10,y:5}, {x:0,y:5}, {x:0,y:0}];
+  // console.log(polygon);
+  // return computeArea(polygon) + computePerimeter(polygon);
+  const area = computeArea(polygon);
+  const perimeter = computePerimeter(polygon);
+  return area + (perimeter / 2) + 1;
 }
 
 console.log(part1(sampleInput));
-// console.log(part1(realInput));
+console.log(part1(realInput));
