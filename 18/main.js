@@ -739,94 +739,38 @@ U 7 (#7a8373)
 L 9 (#5da862)
 U 4 (#13a8d3)`;
 
-function parsePlan(input) {
-  return input.split("\n").map((row) => row.split(" ")).map((row) => {
-    return { dir: row[0], dist: Number.parseInt(row[1], 10), rgb: row[2] };
-  });
+function parsePolygon(input, vectorFromRow) {
+  const vectors = input.split("\n").map((row) => vectorFromRow(row));
+  let x = 0, y = 0;
+  const polygon = [{x, y}];
+  for (const vector of vectors)
+    polygon.push({ x: x += vector.x, y: y += vector.y });
+
+  return polygon;
 }
 
-function printGrid(grid) {
-  console.log(grid.map((row) => row.join("")).join("\n"));
-}
+function computeArea(polygon) {
+  const N = polygon.length;
+  let area = 0;
+  for (let i = 0; i < N - 2; i++)
+    area += -polygon[i].y * polygon[i+1].x + polygon[i].x * polygon[i+1].y;
 
-function computeStartingMap(plan) {
-  let x = 0, y = 0, l = 0, r = 0, u = 0, d = 0;
-  for (const step of plan) {
-    switch (step.dir) {
-      case "L": x -= step.dist; l = Math.min(l, x); break;
-      case "R": x += step.dist; r = Math.max(r, x); break;
-      case "U": y -= step.dist; u = Math.min(u, y); break;
-      case "D": y += step.dist; d = Math.max(d, y); break;
-      default: throw new Error(`Unexpected dir ${step.dir}`);
-    }
-  }
-    
-  const w = r - l + 1;
-  const h = d - u + 1;
-  const ox = -l;
-  const oy = -u;
-
-  const grid = [];
-  for (let y = 0; y < h; y++) {
-    const row = [];
-    grid.push(row);
-    for (let x = 0; x < w; x++)
-      row.push(x === ox && y === oy ? "#" : ".");
-  }
-
-  return { grid, ox, oy };
-}
-
-const dirs = { "L": [-1, 0], "R": [1, 0], "U": [0, -1], "D": [0, 1] };
-
-function dig(map, plan) {
-  let x = map.ox, y = map.oy;
-  let grid = map.grid;
-  for (const step of plan) {
-    const [dx, dy] = dirs[step.dir];
-    for (let d = 0; d < step.dist; d++) {
-      x += dx;
-      y += dy;
-      grid[y][x] = "#";
-      // printGrid(grid);
-    }
-  }
-}
-
-function flood(grid, x, y) {
-  const stack = [x, y];
-  function maybePush(a, b) {
-    const row = grid[b];
-    if (row && "." === row[a])
-      stack.push(a, b);
-  }
-      
-  while (stack.length > 0) {
-    y = stack.pop();
-    x = stack.pop();
-    grid[y][x] = "#";
-    maybePush(x + 1, y);
-    maybePush(x - 1, y);
-    maybePush(x, y + 1);
-    maybePush(x, y - 1);
-  }
+  area += -polygon[N-1].y * polygon[0].x + polygon[N-1].x * polygon[0].y;
+  return 0.5 * Math.abs(area);
 }
 
 function part1(input) {
-  const plan = parsePlan(input);
-  const map = computeStartingMap(plan);
-  dig(map, plan);
-  console.log("Dug:");
-  // printGrid(map.grid);
-
-  const sx = map.ox + 1;
-  const sy = map.oy + 1;
-  flood(map.grid, sx, sy);
-  console.log("Flooded:");
-  // printGrid(map.grid);
-
-  return map.grid.map((row) => row.reduce((prev, cur) => prev + (cur === "#" ? 1 : 0), 0)).reduce((prev, cur) => prev + cur, 0);
+  const polygon = parsePolygon(input, (row) => {
+    const parts = row.split(" ");
+    const dirs = { "L": [-1, 0], "R": [1, 0], "U": [0, -1], "D": [0, 1] };
+    const dir = dirs[parts[0]];
+    const dist = Number.parseInt(parts[1], 10);
+    return { x: dir[0] * dist, y: dir[1] * dist };
+  });
+    
+  console.log(polygon);
+  return computeArea(polygon);
 }
 
 console.log(part1(sampleInput));
-console.log(part1(realInput));
+// console.log(part1(realInput));

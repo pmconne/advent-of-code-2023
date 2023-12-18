@@ -7,3 +7,8 @@ Puzzle input produces a map where the dug path never criss-crosses itself.
 Also the dug path always has at least one undug tile between it.
 So simple scan should work
 
+Part 2
+Yeah flood-filling a grid's not gonna work this time.
+Need area of a polygon (non-convex).
+https://stackoverflow.com/questions/34326728/how-do-i-calculate-the-area-of-a-non-convex-polygon
+
