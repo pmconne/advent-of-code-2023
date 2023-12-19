@@ -2,3 +2,10 @@
 WF = name{cond1:action1,cond2:action2,...,defaultAction}
 The starting workflow is named "in"
 Action can be A)ccept, R)eject, or the name of the next workflow.
+
+Part 2
+Could work backwards from A states. Do rules form a tree or a graph?
+	Looks like you can't reach the same rule via multiple paths.
+Parse each rule as a { prop, min, max, result }
+
+
