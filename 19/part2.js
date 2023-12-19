@@ -745,7 +745,7 @@ jpz{s>436:A,jx}
 function parseWorkflows(input) {
   input = input.split("\n\n")[0];
   const workflows = {};
-  const regex = />|<|=/;
+  const regex = />|</;
   for (const line of input.split("\n")) {
     let [name, rest] = line.split("{");
     workflows[name] = [];
@@ -761,79 +761,57 @@ function parseWorkflows(input) {
       let [prop, production] = rule.split(op);
       let [value, result] = production.split(":");
       value = Number.parseInt(value, 10);
-      let min = 1, max = 4000;
-      if ("<" === op)
-        max = value - 1;
-      else if (">" === op)
-        min = value + 1;
-
-      workflows[name].push({ prop, result, min, max });
+      workflows[name].push({ prop, result, op, value });
     }
   }
 
   return workflows;
 }
 
-function detectAcceptancePaths(workflows) {
-  const directPaths = [];
-  for (const [k,v] of Object.entries(workflows)) {
-    // console.log(k);
-    for (let i = 0; i < v.length; i++) {
-      // console.log(`  ${JSON.stringify(v[i])}`);
-      if (v[i].result === "A")
-        directPaths.push({ workflow: k, rule: i });
-    }
-  }
+function bisect(range, rule) {
+  if (!rule.prop)
+    throw new Error("can't bisect a rule with no condition");
 
-  return directPaths;
+  const pass = { min: range.min, max: {...range.max} };
+  const fail = { min: {...range.min}, max: range.max };
+  if (rule.op === "<") {
+    pass.max[rule.prop] = Math.min(rule.value - 1, pass.max[rule.prop]);
+    fail.min[rule.prop] = Math.max(rule.value, fail.min[rule.prop]);
+  } else {
+    pass.min[rule.prop] = Math.max(rule.value + 1, pass.min[rule.prop]);
+    fail.max[rule.prop] = Math.min(rule.value, fail.max[rule.prop]);
+  }
+    
+  return { pass, fail };
 }
 
-function computeBounds(path, workflows) {
-  const min = { x:1, m:1, a:1, s:1 };
-  const max = { x:4000, m: 4000, a:4000, s:4000 };
-  while (true) {
-    console.log(`  ${path.workflow}[${path.rule}]`);
-    const rule = workflows[path.workflow][path.rule];
-    if (rule.prop) {
-      max[rule.prop] = Math.min(max[rule.prop], rule.max);
-      min[rule.prop] = Math.max(min[rule.prop], rule.min);
-    }
-
-    if (path.workflow === "in")
-      break;
-
-    for (const [k,v] of Object.entries(workflows)) {
-      for (let i = 0; i < v.length; i++) {
-        if (v[i].result === path.workflow) {
-          path.workflow = k;
-          path.rule = i;
-          break;
-        }
-      }
-    }
+function countCombos(workflows, wfName, range) {
+  if ("R" === wfName) {
+    return 0;
+  } else if ("A" === wfName) {
+    return ["x", "m", "a", "s"].map((k) => range.max[k] + 1 - range.min[k]).reduce((p, c) => p * c, 1);
   }
+  
+  let nCombos = 0;
+  const workflow = workflows[wfName];
+  // console.log(wfName);
+  // console.log(workflow);
+  for (const rule of workflow) {
+    // console.log(rule);
+    if (!rule.prop)
+      return nCombos + countCombos(workflows, rule.result, range);
 
-  console.log(JSON.stringify({min, max}));
-  return { min, max };
+    const { pass, fail } = bisect(range, rule);
+    nCombos += countCombos(workflows, rule.result, pass);
+    range = fail;
+  }
 }
 
 function part2(input) {
   const workflows = parseWorkflows(input);
-  const directPaths = detectAcceptancePaths(workflows);
-  const ranges = directPaths.map((path) => computeBounds(path, workflows));
-  // console.log(JSON.stringify(ranges, undefined, "  "));
-  let total = ranges.map((range) => {
-    let combos = 1;
-    for (const k of ["x", "m", "a", "s"]) {
-      const min = range.min[k];
-      const max = range.max[k];
-      combos *= max + 1 - min;
-    }
-
-    console.log(combos);
-    return combos;
-  }).reduce((prev, cur) => cur + prev, 0);
-  return total;
+  // console.log(workflows);
+  return countCombos(workflows, "in", { min: {x:1, m:1, a:1, s:1 }, max: {x:4000, m:4000, a:4000, s:4000} });
 }
 
 console.log(part2(sampleInput));
+console.log(part2(realInput));

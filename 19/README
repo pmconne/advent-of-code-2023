@@ -8,4 +8,4 @@ Could work backwards from A states. Do rules form a tree or a graph?
 	Looks like you can't reach the same rule via multiple paths.
 Parse each rule as a { prop, min, max, result }
 
-
+Working backwards from "A" means counting some combos more than once.
