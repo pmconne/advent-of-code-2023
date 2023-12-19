@@ -818,7 +818,7 @@ function part1(input) {
   const puzzle = parsePuzzle(input);
   // console.log(puzzle.parts);
   // console.log(puzzle.workflows);
-  let numAccepted = 0;
+  let total = 0;
   for (const part of puzzle.parts) {
     // console.log(JSON.stringify(part));
     let result = "in";
@@ -832,6 +832,7 @@ function part1(input) {
           break;
       }
 
+      // console.log(result);
       if (typeof result !== "string")
         throw new Error("workflow did not resolve");
     }
@@ -841,10 +842,10 @@ function part1(input) {
       throw new Error(`Unexpected result ${result}`);
 
     if ("A" === result)
-      ++numAccepted;
+      total += part.x + part.m + part.a + part.s;
   }
       
-  return numAccepted;
+  return total;
 }
 
 console.log(part1(sampleInput));
