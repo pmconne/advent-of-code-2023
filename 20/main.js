@@ -131,7 +131,7 @@ class Output extends GraphNode {
   }
 
   receive(signal) {
-    console.log(`Output received ${signal.pulse} from ${signal.source.name}`);
+    // console.log(`Output received ${signal.pulse} from ${signal.source.name}`);
     return undefined;
   }
 }
@@ -174,8 +174,9 @@ function pushButton(graph) {
   const q = [ { source: graph["broadcaster"], pulse: "low" } ];
   while (q.length > 0) {
     const signal = q.shift();
-    console.log(`${signal.source.name} emits ${signal.pulse}`);
+    // console.log(`${signal.source.name} emits ${signal.pulse}`);
     for (const target of signal.source.targets) {
+      console.log(`${signal.source.name} -${signal.pulse}-> ${target.name}`);
       const emit = target.receive(signal);
       if (emit)
         q.push({ source: target, pulse: emit });
