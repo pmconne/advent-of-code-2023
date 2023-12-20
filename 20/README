@@ -1,0 +1,21 @@
+
+Modules
+	% = flip flop
+		initial=off
+		high=>ignore
+		low=>
+			toggle on/off
+			if it is now on, => high else => low
+	& = conjunction
+		initial=[low,low,...,low]
+		low|high=>
+			record state for that input
+			if all high => low else => high
+	broadcast (starting state)
+		pulse => pulse
+button emits a low pulse to broadcast
+Pulses go on a FILO queue.
+
+A node in the graph can have multiple input nodes.
+
+	
