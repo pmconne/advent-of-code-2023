@@ -83,6 +83,7 @@ class GraphNode {
     if (this.targets.includes(targetNode))
       throw new Error(`Duplicate link ${this.name}->${targetNode.name}`);
 
+    // console.log(`${this.name} => ${targetNode.name}`);
     this.targets.push(targetNode);
     targetNode.addSource(this);
   }
@@ -171,8 +172,14 @@ function parseGraph(input) {
   
   for (const def of Object.values(nodeDefs)) {
     const source = nodes[def.name];
-    for (const child of def.children)
-      source.addTarget(nodes[child]);
+    for (const child of def.children) {
+      // Some nodes don't actually exist, wtf.
+      let target = nodes[child];
+      if (!target)
+        nodes[child] = target = new Output(child);
+
+      source.addTarget(target);
+    }
   }
 
   return nodes;
@@ -212,5 +219,5 @@ function part1(input, numPresses) {
 }
 
 // console.log(part1(simpleInput, 1));
-console.log(part1(sampleInput, 1000));
+// console.log(part1(sampleInput, 1000));
 console.log(part1(realInput, 1000));
