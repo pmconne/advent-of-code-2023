@@ -102,6 +102,7 @@ class FlipFlop extends GraphNode {
   receive(signal) {
     if ("low" === signal.pulse) {
       this.on = !this.on;
+      // console.log(`  ${this.name} is ${this.on ? "ON" : "OFF"}`);
       return this.on ? "high" : "low";
     }
 
@@ -113,15 +114,22 @@ class Conjunction extends GraphNode {
   memory = {};
 
   addSource(sourceNode) {
-    this.memory[sourceNode] = "low";
+    // console.log(`${this.name} <= ${sourceNode.name}`);
+    this.memory[sourceNode.name] = "low";
+    // for (const [k,v] of Object.entries(this.memory))
+    //   console.log(`  ${k} = ${v}`);
   }
 
   receive(signal) {
     if (!signal.source)
       throw new Error("receive expected source");
 
-    this.memory[signal.source] = signal.pulse;
-    return Array.from(Object.values(this.memory)).every((x) => x === "high") ? "low" : "high";
+    this.memory[signal.source.name] = signal.pulse;
+    for (const value of Object.values(this.memory))
+      if ("low" === value)
+        return "high";
+
+    return "low";
   }
 }
 
@@ -171,26 +179,38 @@ function parseGraph(input) {
 }
 
 function pushButton(graph) {
+  const counts = { low: 1, high: 0 };
   const q = [ { source: graph["broadcaster"], pulse: "low" } ];
   while (q.length > 0) {
     const signal = q.shift();
+    
     // console.log(`${signal.source.name} emits ${signal.pulse}`);
     for (const target of signal.source.targets) {
-      console.log(`${signal.source.name} -${signal.pulse}-> ${target.name}`);
+      ++counts[signal.pulse];
+      // console.log(`${signal.source.name} -${signal.pulse}-> ${target.name}`);
       const emit = target.receive(signal);
       if (emit)
         q.push({ source: target, pulse: emit });
     }
   }
+
+  return counts;
 }
 
 function part1(input, numPresses) {
+  let low = 0, high = 0;
   const graph = parseGraph(input);
   for (let i = 0; i < numPresses; i++) {
-    console.log(`\nButton ${i}:`);
-    pushButton(graph);
+    // console.log(`\nButton ${i}:`);
+    const result = pushButton(graph);
+    low += result.low;
+    high += result.high;
   }
+
+  // console.log(`low=${low} high=${high}`);
+  return low * high;
 }
 
-// console.log(part1(simpleInput, 3));
-console.log(part1(sampleInput, 5));
+// console.log(part1(simpleInput, 1));
+console.log(part1(sampleInput, 1000));
+console.log(part1(realInput, 1000));
