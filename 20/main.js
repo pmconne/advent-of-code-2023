@@ -192,4 +192,5 @@ function part1(input, numPresses) {
   }
 }
 
-console.log(part1(simpleInput, 3));
+// console.log(part1(simpleInput, 3));
+console.log(part1(sampleInput, 5));
